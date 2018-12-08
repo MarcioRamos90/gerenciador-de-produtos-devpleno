@@ -2,30 +2,31 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Home from "./Components/Home";
 import Sobre from "./Components/Sobre";
+import Produtos from "./Components/Produtos";
 
 class App extends Component {
   render() {
     return (
       <Router>
         <div>
-          <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="/">
+          <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a className="navbar-brand" href="/">
               Gerenciador de Produtos
             </a>
-            <div class="navbar">
-              <ul class="navbar-nav">
-                <li class="nav-item active">
-                  <Link class="nav-link" to="/">
+            <div className="navbar">
+              <ul className="navbar-nav">
+                <li className="nav-item">
+                  <Link className="nav-link" to="/">
                     Inicio
                   </Link>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/">
+                <li className="nav-item">
+                  <Link className="nav-link" to="/produtos">
                     Produtos
-                  </a>
+                  </Link>
                 </li>
-                <li class="nav-item">
-                  <Link class="nav-link" to="/sobre">
+                <li className="nav-item">
+                  <Link className="nav-link" to="/sobre">
                     Sobre
                   </Link>
                 </li>
@@ -34,6 +35,7 @@ class App extends Component {
           </nav>
           <div className="container mt-3">
             <Route exact path="/" component={Home} />
+            <Route path="/produtos" component={Produtos} />
             <Route exact path="/sobre" component={Sobre} />
           </div>
         </div>
