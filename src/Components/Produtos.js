@@ -11,12 +11,16 @@ class Produtos extends Component {
   };
 
   componentDidMount = () => {
+    this.loadCategorias();
+  };
+
+  loadCategorias() {
     axios.get("http://localhost:3001/categoria").then(res => {
       this.setState({
         categorias: res.data
       });
     });
-  };
+  }
 
   renderCategorias = cat => {
     return (
@@ -24,6 +28,23 @@ class Produtos extends Component {
         <Link to={`/produtos/categoria/${cat.id}`}>{cat.categoria}</Link>
       </li>
     );
+  };
+
+  createNewCategoria = value => {
+    axios
+      .post("http://localhost:3001/categoria", {
+        categoria: value
+      })
+      .then(res => {
+        this.loadCategorias();
+      });
+  };
+
+  handlerNewCategoria = key => {
+    if (key.keyCode === 13) {
+      this.createNewCategoria(key.target.value);
+      key.target.value = "";
+    }
   };
 
   render() {
@@ -35,6 +56,15 @@ class Produtos extends Component {
           <h3>Categoria</h3>
           {/* TODAS CATEGORIAS */}
           {categorias.map(this.renderCategorias)}
+          <div className="alert alert-primary mt-3">
+            <input
+              onKeyUp={this.handlerNewCategoria}
+              type="text"
+              className="form-control"
+              aria-label="Sizing example input"
+              placeholder="nova Categoria"
+            />
+          </div>
         </div>
         <div className="col-md-9">
           <h1>Produtos</h1>

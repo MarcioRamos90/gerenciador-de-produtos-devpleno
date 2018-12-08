@@ -6,6 +6,7 @@ class Categoria extends Component {
     produtos: [],
     categorias: ""
   };
+
   searchCategoria = id => {
     axios.get(`http://localhost:3001/categoria/${id}`).then(res => {
       this.setState({
@@ -13,6 +14,7 @@ class Categoria extends Component {
       });
     });
   };
+
   searchProducts = id => {
     axios.get(`http://localhost:3001/Produtos?cat=${id}`).then(res => {
       this.setState({
@@ -35,7 +37,11 @@ class Categoria extends Component {
   };
 
   renderProdutos = prod => {
-    return <div key={prod.id}>{prod.desc}</div>;
+    return (
+      <div className="alert alert-secondary" key={prod.id}>
+        {prod.desc}
+      </div>
+    );
   };
 
   render() {
