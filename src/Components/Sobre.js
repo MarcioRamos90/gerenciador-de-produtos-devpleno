@@ -1,9 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Sobre extends Component {
-  render() {
-    return <h4>Sobre Nós</h4>;
-  }
-}
+const Sobre = () => {
+  return <h4>Sobre Nós</h4>;
+};
 
 export default Sobre;

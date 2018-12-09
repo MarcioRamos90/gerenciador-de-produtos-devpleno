@@ -1,13 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Produtos extends Component {
-  render() {
-    return (
-      <div className="mt-3">
-        <h5>Produtos Home</h5>
-      </div>
-    );
-  }
-}
+const Produtos = () => {
+  return (
+    <div className="mt-3">
+      <h5>Produtos Home</h5>
+    </div>
+  );
+};
 
 export default Produtos;

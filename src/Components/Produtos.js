@@ -1,43 +1,38 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-import axios from "axios";
 
 import ProdutosHome from "./ProdutosHome";
 import Categoria from "./Categoria";
 
 class Produtos extends Component {
-  state = {
-    categorias: []
-  };
-
   componentDidMount = () => {
-    this.loadCategorias();
+    this.props.loadCategorias();
   };
 
-  loadCategorias() {
-    axios.get("http://localhost:3001/categoria").then(res => {
-      this.setState({
-        categorias: res.data
-      });
+  deleteCategoria = id => {
+    this.props.deleteCategoria(id).then(res => {
+      this.props.loadCategorias();
     });
-  }
+  };
 
   renderCategorias = cat => {
     return (
       <li key={cat.id}>
+        <button
+          className="btn mr-2"
+          onClick={() => this.deleteCategoria(cat.id)}
+        >
+          X
+        </button>
         <Link to={`/produtos/categoria/${cat.id}`}>{cat.categoria}</Link>
       </li>
     );
   };
 
   createNewCategoria = value => {
-    axios
-      .post("http://localhost:3001/categoria", {
-        categoria: value
-      })
-      .then(res => {
-        this.loadCategorias();
-      });
+    this.props.createCategoria(value).then(res => {
+      this.props.loadCategorias();
+    });
   };
 
   handlerNewCategoria = key => {
@@ -48,14 +43,15 @@ class Produtos extends Component {
   };
 
   render() {
-    const { categorias } = this.state;
-    const { match } = this.props;
+    const { match, categorias } = this.props;
     return (
       <div className="row">
         <div className="col-md-3">
           <h3>Categoria</h3>
           {/* TODAS CATEGORIAS */}
-          {categorias.map(this.renderCategorias)}
+          <ul style={{ listStyle: "none" }}>
+            {categorias.map(this.renderCategorias)}
+          </ul>
           <div className="alert alert-primary mt-3">
             <input
               onKeyUp={this.handlerNewCategoria}
