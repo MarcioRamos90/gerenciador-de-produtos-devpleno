@@ -24,10 +24,19 @@ class Categoria extends Component {
     }
   };
 
+  removeProduto = id => {
+    const { catId } = this.props.match.params;
+
+    this.props.removeProduto(id).then(res => {
+      this.props.loadProdutos(catId);
+    });
+  };
+
   renderProdutos = prod => {
     return (
-      <div className="alert alert-secondary" key={prod.id}>
-        {prod.produto}
+      <div className="alert alert-primary" key={prod.id}>
+        {prod.produto}{" "}
+        <button onClick={() => this.removeProduto(prod.id)}>Delete</button>
       </div>
     );
   };
@@ -36,6 +45,11 @@ class Categoria extends Component {
     return (
       <div>
         <h4>{this.props.categoria}</h4>
+        {this.props.produtos.length === 0 && (
+          <div className="alert alert-dark text-center mt-5">
+            Nenhum produto encontrado
+          </div>
+        )}
         <div>{this.props.produtos.map(this.renderProdutos)}</div>
       </div>
     );

@@ -132,6 +132,7 @@ class Produtos extends Component {
                 {...props}
                 categoria={this.props.categoria}
                 produtos={this.props.produtos}
+                removeProduto={this.props.removeProduto}
                 loadProdutos={this.props.loadProdutos}
                 searchCategoria={this.props.searchCategoria}
               />

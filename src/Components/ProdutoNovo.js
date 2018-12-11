@@ -10,7 +10,9 @@ class ProdutoNovo extends Component {
       };
       this.props
         .createProduto(produto)
-        .then(res => this.props.history.push("/produtos/" + categoria.value));
+        .then(res =>
+          this.props.history.push("/produtos/categoria/" + categoria.value)
+        );
     }
   };
 

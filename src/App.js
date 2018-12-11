@@ -19,6 +19,10 @@ class App extends Component {
     });
   };
 
+  removeProduto = id => {
+    return this.props.api.deleteProduto(id);
+  };
+
   searchCategoria = id => {
     this.props.api.searchCategoria(id).then(res => {
       this.setState({
@@ -87,6 +91,7 @@ class App extends Component {
                 return (
                   <Produtos
                     {...props}
+                    removeProduto={this.removeProduto}
                     loadProdutos={this.loadProdutos}
                     produtos={this.state.produtos}
                     categorias={this.state.categorias}
