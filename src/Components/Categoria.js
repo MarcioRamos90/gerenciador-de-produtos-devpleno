@@ -1,45 +1,33 @@
 import React, { Component } from "react";
-import axios from "axios";
 
 class Categoria extends Component {
   state = {
     produtos: [],
-    categorias: ""
-  };
-
-  searchCategoria = id => {
-    axios.get(`http://localhost:3001/categoria/${id}`).then(res => {
-      this.setState({
-        categoria: res.data.categoria
-      });
-    });
-  };
-
-  searchProducts = id => {
-    axios.get(`http://localhost:3001/Produtos?cat=${id}`).then(res => {
-      this.setState({
-        produtos: res.data
-      });
-    });
+    categorias: "",
+    id: ""
   };
 
   componentDidMount = () => {
     const { catId } = this.props.match.params;
 
-    this.searchProducts(catId);
-    this.searchCategoria(catId);
+    this.setState({ id: catId });
+    this.props.searchCategoria(catId);
+    this.props.loadProdutos(catId);
   };
 
   componentWillReceiveProps = nextProps => {
     const { catId } = nextProps.match.params;
-    this.searchProducts(catId);
-    this.searchCategoria(catId);
+    if (catId !== this.state.id) {
+      this.setState({ id: catId });
+      this.props.loadProdutos(catId);
+      this.props.searchCategoria(catId);
+    }
   };
 
   renderProdutos = prod => {
     return (
       <div className="alert alert-secondary" key={prod.id}>
-        {prod.desc}
+        {prod.produto}
       </div>
     );
   };
@@ -47,8 +35,8 @@ class Categoria extends Component {
   render() {
     return (
       <div>
-        <h4>{this.state.categoria}</h4>
-        <div>{this.state.produtos.map(this.renderProdutos)}</div>
+        <h4>{this.props.categoria}</h4>
+        <div>{this.props.produtos.map(this.renderProdutos)}</div>
       </div>
     );
   }

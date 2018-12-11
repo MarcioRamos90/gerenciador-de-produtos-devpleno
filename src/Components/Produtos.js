@@ -3,10 +3,21 @@ import { Route, Link } from "react-router-dom";
 
 import ProdutosHome from "./ProdutosHome";
 import Categoria from "./Categoria";
+import ProdutoNovo from "./ProdutoNovo";
 
 class Produtos extends Component {
+  state = {
+    editingCategoria: ""
+  };
+
   componentDidMount = () => {
     this.props.loadCategorias();
+  };
+
+  createNewCategoria = value => {
+    this.props.createCategoria(value).then(res => {
+      this.props.loadCategorias();
+    });
   };
 
   deleteCategoria = id => {
@@ -15,22 +26,8 @@ class Produtos extends Component {
     });
   };
 
-  renderCategorias = cat => {
-    return (
-      <li key={cat.id}>
-        <button
-          className="btn mr-2"
-          onClick={() => this.deleteCategoria(cat.id)}
-        >
-          X
-        </button>
-        <Link to={`/produtos/categoria/${cat.id}`}>{cat.categoria}</Link>
-      </li>
-    );
-  };
-
-  createNewCategoria = value => {
-    this.props.createCategoria(value).then(res => {
+  editCategoria = categoria => {
+    this.props.editCategoria(categoria).then(res => {
       this.props.loadCategorias();
     });
   };
@@ -40,6 +37,67 @@ class Produtos extends Component {
       this.createNewCategoria(key.target.value);
       key.target.value = "";
     }
+  };
+
+  handlerEditCategoria = key => {
+    if (key.keyCode === 13) {
+      this.editCategoria({
+        id: this.state.editingCategoria,
+        categoria: key.target.value
+      });
+      key.target.value = "";
+      this.dezabilitandoEdicao();
+    }
+  };
+
+  habilitandoEdicao(id) {
+    this.setState({
+      editingCategoria: id
+    });
+  }
+  dezabilitandoEdicao() {
+    this.setState({
+      editingCategoria: ""
+    });
+  }
+
+  renderCategorias = cat => {
+    return (
+      <div key={cat.id} className="mt-2">
+        {this.state.editingCategoria === cat.id && (
+          <div className="form-group mt-2" style={{ display: "flex" }}>
+            <input
+              className="form-control"
+              defaultValue={cat.categoria}
+              onKeyUp={this.handlerEditCategoria}
+            />
+            <button
+              className="btn mr-2"
+              onClick={() => this.dezabilitandoEdicao(cat.id)}
+            >
+              cncl
+            </button>
+          </div>
+        )}
+        {this.state.editingCategoria !== cat.id && (
+          <li>
+            <button
+              className="btn mr-2"
+              onClick={() => this.deleteCategoria(cat.id)}
+            >
+              X
+            </button>
+            <button
+              className="btn mr-2"
+              onClick={() => this.habilitandoEdicao(cat.id)}
+            >
+              Edt
+            </button>
+            <Link to={`/produtos/categoria/${cat.id}`}>{cat.categoria}</Link>
+          </li>
+        )}
+      </div>
+    );
   };
 
   render() {
@@ -61,6 +119,7 @@ class Produtos extends Component {
               placeholder="nova Categoria"
             />
           </div>
+          <Link to="/produtos/novo">Novo produto</Link>
         </div>
         <div className="col-md-9">
           <h1>Produtos</h1>
@@ -68,7 +127,26 @@ class Produtos extends Component {
           <Route
             exact
             path={match.url + "/categoria/:catId"}
-            component={Categoria}
+            render={props => (
+              <Categoria
+                {...props}
+                categoria={this.props.categoria}
+                produtos={this.props.produtos}
+                loadProdutos={this.props.loadProdutos}
+                searchCategoria={this.props.searchCategoria}
+              />
+            )}
+          />
+          <Route
+            exact
+            path={"/produtos/novo"}
+            render={props => (
+              <ProdutoNovo
+                {...props}
+                categorias={categorias}
+                createProduto={this.props.createProduto}
+              />
+            )}
           />
         </div>
       </div>

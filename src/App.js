@@ -6,7 +6,25 @@ import Produtos from "./Components/Produtos";
 
 class App extends Component {
   state = {
-    categorias: []
+    produtos: [],
+    categorias: [],
+    categoria: null
+  };
+
+  loadProdutos = id => {
+    this.props.api.loadProdutos(id).then(res => {
+      this.setState({
+        produtos: res.data
+      });
+    });
+  };
+
+  searchCategoria = id => {
+    this.props.api.searchCategoria(id).then(res => {
+      this.setState({
+        categoria: res.data.categoria
+      });
+    });
   };
 
   loadCategorias = () => {
@@ -23,6 +41,14 @@ class App extends Component {
 
   deleteCategoria = id => {
     return this.props.api.deleteCategoria(id);
+  };
+
+  editCategoria = categoria => {
+    return this.props.api.editCategoria(categoria);
+  };
+
+  createNewProduto = value => {
+    return this.props.api.createProduto(value);
   };
 
   render() {
@@ -61,10 +87,16 @@ class App extends Component {
                 return (
                   <Produtos
                     {...props}
+                    loadProdutos={this.loadProdutos}
+                    produtos={this.state.produtos}
                     categorias={this.state.categorias}
+                    categoria={this.state.categoria}
+                    searchCategoria={this.searchCategoria}
                     loadCategorias={this.loadCategorias}
                     createCategoria={this.createNewCategoria}
                     deleteCategoria={this.deleteCategoria}
+                    editCategoria={this.editCategoria}
+                    createProduto={this.createNewProduto}
                   />
                 );
               }}
